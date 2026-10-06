@@ -1,13 +1,14 @@
 package net.knachike.journalApp.service;
 
 import net.knachike.journalApp.entity.JournalEntity;
+import net.knachike.journalApp.entity.User;
 import net.knachike.journalApp.repository.JournalEntryRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,15 +19,18 @@ public class JournalEntryService {
     private JournalEntryRepository journalEntryRepository;
 
     @Autowired
-    private MongoTemplate mongoTemplate;
+    private UserService userService;
+
+    public void saveJournalEntry(JournalEntity journalEntity, String userName) {
+        User user= userService.findByUserName(userName);
+        journalEntity.setDate(LocalDateTime.now());
+        JournalEntity savedEntity = journalEntryRepository.save(journalEntity);
+        user.getJournalEntities().add(savedEntity);
+        userService.saveEntry(user);
+    }
 
     public void saveJournalEntry(JournalEntity journalEntity) {
-
-        //System.out.println("MongoTemplate database: "+ mongoTemplate.getDb().getName());
-
-        JournalEntity savedEntity = journalEntryRepository.save(journalEntity);
-
-        //System.out.println("Saved ID: " + savedEntity.getId());
+        journalEntryRepository.save(journalEntity);
     }
 
     public List<JournalEntity> getALl(){
@@ -37,7 +41,10 @@ public class JournalEntryService {
         return journalEntryRepository.findById(id);
     }
 
-    public void deleteById(ObjectId id){
+    public void deleteById(ObjectId id, String userName){
+        User user= userService.findByUserName(userName);
+        user.getJournalEntities().removeIf(x->x.getId().equals(id));
+        userService.saveEntry(user);
         journalEntryRepository.deleteById(id);
     }
 
