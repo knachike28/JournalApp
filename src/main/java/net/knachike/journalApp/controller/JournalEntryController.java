@@ -37,7 +37,7 @@ public class JournalEntryController {
         try {
 
             journalEntryService.saveJournalEntry(myEntity, userName);
-            return new ResponseEntity<>(myEntity, HttpStatus.OK);
+            return new ResponseEntity<>(myEntity, HttpStatus.CREATED);
         }catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
