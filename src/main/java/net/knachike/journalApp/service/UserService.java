@@ -1,12 +1,9 @@
 package net.knachike.journalApp.service;
 
-import net.knachike.journalApp.entity.JournalEntity;
 import net.knachike.journalApp.entity.User;
-import net.knachike.journalApp.repository.JournalEntryRepository;
 import net.knachike.journalApp.repository.UserRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -23,13 +20,13 @@ public class UserService {
 
     private static final PasswordEncoder passwordEncoder= new BCryptPasswordEncoder();
 
-    public void saveEntry(User userEntity) {
+    public void saveNewUser(User userEntity) {
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
         userEntity.setRoles(Arrays.asList("USER"));
         userRepository.save(userEntity);
     }
 
-    public void saveNewUser(User userEntity) {
+    public void saveUser(User userEntity) {
         userRepository.save(userEntity);
     }
 
