@@ -22,9 +22,9 @@ public class User {
     private ObjectId id;
     @Indexed(unique = true)
     private String userName;
-
+    @NonNull
     private String password;
-
     @DBRef
     private List<JournalEntity> journalEntities= new ArrayList<>();
+    private List<String>roles;
 }
