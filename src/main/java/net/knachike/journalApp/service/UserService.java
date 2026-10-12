@@ -50,5 +50,9 @@ public class UserService {
         return userRepository.findByUserName(userName);
     }
 
-
+    public void saveAdmin(User userEntity) {
+        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
+        userEntity.setRoles(Arrays.asList("USER", "ADMIN"));
+        userRepository.save(userEntity);
+    }
 }
