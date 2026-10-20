@@ -1,8 +1,11 @@
 package net.knachike.journalApp.service;
 
+import lombok.extern.slf4j.Slf4j;
 import net.knachike.journalApp.entity.User;
 import net.knachike.journalApp.repository.UserRepository;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,17 +16,32 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
+@Slf4j
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
 
+//    private static final Logger logger= LoggerFactory.getLogger(UserService.class);
+
     private static final PasswordEncoder passwordEncoder= new BCryptPasswordEncoder();
 
-    public void saveNewUser(User userEntity) {
-        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
-        userEntity.setRoles(Arrays.asList("USER"));
-        userRepository.save(userEntity);
+    public boolean saveNewUser(User userEntity) {
+        try {
+            userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
+            userEntity.setRoles(Arrays.asList("USER"));
+            userRepository.save(userEntity);
+            return true;
+        } catch (Exception e) {
+            log.error("Error occurred for {} :", userEntity.getUserName(), e);
+//            logger.error("Error occurred for {} :", userEntity.getUserName(), e);
+//            logger.warn("Error occurred", e);
+//            logger.info("Error occurred", e);
+//            logger.debug("Error occurred", e);
+//            logger.trace("Error occurred", e);
+
+            return false;
+        }
     }
 
     public void saveUser(User userEntity) {

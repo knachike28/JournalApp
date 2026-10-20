@@ -1,0 +1,15 @@
+#spring:
+#  profiles:
+#    active: dev
+#
+#
+#logging:
+#  level:
+#    net:
+#      knachike:
+#        journalApp: trace
+#
+#
+##logging:
+##  level:
+##    root: ERROR
