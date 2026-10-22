@@ -10,6 +10,18 @@ spring:
     mongodb:
       auto-index-creation: true
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: arjundeykumar@gmail.com
+    password: XXXX XXXX XXXX XXXX
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true;
+
 server:
   port: 8080
 #  servlet:
