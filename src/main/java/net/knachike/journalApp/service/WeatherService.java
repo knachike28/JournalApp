@@ -2,6 +2,7 @@ package net.knachike.journalApp.service;
 
 
 import net.knachike.journalApp.api.response.WeatherResponse;
+import net.knachike.journalApp.cache.AppCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
@@ -15,16 +16,16 @@ public class WeatherService {
     @Value("${weather.api.key}")
     private String apiKey;
 
-    private static final String API= "https://api.weatherstack.com/current?access_key=API_KEY&query=CITY";
-
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private AppCache appCache;
+
     public WeatherResponse getWeather (String city){
-        String finalAPI = API.replace("CITY", city).replace("API_KEY", apiKey);
+        String finalAPI = appCache.APP_CACHE.get("APP_CACHE").replace("<CITY>", city).replace("<API_KEY>", apiKey);
         ResponseEntity<WeatherResponse> response = restTemplate.exchange(finalAPI, HttpMethod.GET, null, WeatherResponse.class);
         WeatherResponse body = response.getBody();
         return body;
     };
-
 }
